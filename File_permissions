@@ -1,10 +1,22 @@
-Introduction to File Permissions
+1.Introduction to File Permissions
 Linux file permissions determine who can read, write, or execute files and directories. Each file and directory has three levels of permission:
 Owner (User): The creator of the file.
 Group: Users belonging to the assigned group.
 Others: All other users on the system.
 
-Permissions are represented as:
+2.Permissions are represented as:
 Read (r or 4) – View file contents.
 Write (w or 2) – Modify file contents.
 Execute (x or 1) – Run scripts or programs.
+
+
+3.Changing Permissions with chmod
+Using Symbolic Mode:
+Modify permissions using symbols:
+Add (+), remove (-), or set (=) permissions.
+
+Examples:
+chmod u+x filename  # Add execute for user
+chmod g-w filename  # Remove write for group
+chmod o=r filename  # Set read-only for others
+chmod u=rwx,g=rx,o= filename  # Set full access for user, read/execute for group, and no access for others

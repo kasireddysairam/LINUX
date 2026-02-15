@@ -1,1 +1,27 @@
+1.Cloud-Init = Automatic setup tool that runs when EC2 starts for the first time
+When EC2 boots for first time:
+Cloud-Init does:
+Set hostname
+Configure network
+Add SSH keys
+Run user-data script
+Install packages
+
+2.If user-data script failed → check here.
+/var/log/cloud-init.log
+/var/log/cloud-init-output.log
+===================================================================================================================
+User Management
+Key files involved in user management:
+/etc/passwd –> Stores user account details.
+/etc/shadow –> Stores encrypted user passwords.
+/etc/group –> Stores group information.
+/etc/gshadow –> Stores secure group details.
+1.Change the home directory:
+usermod -d /new/home/directory -m username
+
+1.%d will remove all line of code in file 
+
+
+
 

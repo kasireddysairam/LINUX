@@ -8,7 +8,9 @@ Others: All other users on the system.
 Read (r or 4) – View file contents.
 Write (w or 2) – Modify file contents.
 Execute (x or 1) – Run scripts or programs.
-
+u = user
+g = group
+o = others
 
 3.Changing Permissions with chmod
 Using Symbolic Mode:
@@ -25,10 +27,32 @@ chmod u=rwx,g=rx,o= filename  # Set full access for user, read/execute for group
 Note: chmod is used for files and folders to change permissions
 
 4.Changing Ownership with chown
+chown user:group filename
 Modify file owner and group:
 chown newuser filename  # Change owner
 chown newuser:newgroup filename  # Change owner and group
 chown :newgroup filename  # Change only group
+example:
+chown ec2-user:devops app.sh
+Owner → ec2-user
+Group → devops
+-rw-r--r-- 1 ec2-user devops app.sh
+
+exaxmple
+chown -R nginx:nginx /var/www/html
+What this means?
+-R → recursive (inside all files & folders)
+Change owner to nginx
+Change group to nginx
+Apply to entire website folder
+==============================================
+
+chgrp = Change Group
+It changes only the group.
+-rw-r--r-- 1 ec2-user ec2-user app.sh
+chgrp devteam app.sh
+-rw-r--r-- 1 ec2-user devteam app.sh
+
 
 
 

@@ -1,1 +1,46 @@
 
+To monitor CPU, memory, disk usage, network activity, and running processes.
+1.ps aux vs top
+==>ps aux Command
+Type: Snapshot command
+Purpose: Shows the current status of processes at one moment in time.
+What it does:
+Displays all running processes
+Shows:
+CPU usage (%CPU)
+Memory usage (%MEM)
+
+===>top Command
+top command give live process update
+Type: Real-time monitoring tool
+Purpose: Continuously monitors system performance.
+What it does:
+Shows real-time CPU usage
+Shows memory usage
+Updates every few seconds
+Shows load average
+Allows interaction (kill process, change priority)
+
+
+===>How many cpu  in virtual meachine as we can check by using command 
+nproc
+
+cpu--> top
+memory-->free -h
+disk--> df -h
+
+
+====================================================================
+Networking Commands
+ping google.com – Checks connectivity to a remote server.
+ifconfig – Displays network interfaces (deprecated, use ip).
+ip a – Shows IP addresses of network interfaces.
+netstat -tulnp – Displays open network connections.
+curl https://example.com – Fetches a webpage's content.
+wget https://example.com/file.zip – Downloads a file from the internet.
+
+
+
+
+
+

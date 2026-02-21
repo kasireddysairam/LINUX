@@ -1,1 +1,113 @@
+/var/log/myapp/app.log
+
+2026-02-21 01:00:01 INFO  Backup process started
+2026-02-21 01:00:03 INFO  Connecting to database
+2026-02-21 01:00:05 ERROR Database connection failed
+2026-02-21 01:00:06 INFO  Retrying connection
+2026-02-21 01:00:10 INFO  Database connected successfully
+2026-02-21 01:00:15 INFO  Backup in progress
+2026-02-21 01:00:25 WARNING Disk usage at 85%
+2026-02-21 01:00:40 ERROR Failed to write to /backup/db.sql
+2026-02-21 01:00:45 INFO  Cleaning temporary files
+2026-02-21 01:00:50 INFO  Backup process completed
+
+1️⃣ grep
+Purpose
+Search text inside files.
+grep "ERROR" /var/log/myapp/app.log
+grep  -i "ERROR" /var/log/myapp/app.log
+-i---> for case insensitive
+Count errors
+grep -c "ERROR" /var/log/myapp/app.log
+c--> count
+=======================================================================
+2️⃣ find
+✅ Purpose
+Find files by name, size, time, type.
+
+Disk is full.
+Now find large files:
+find / -type f -size +1G
+Explanation:
+/ → search entire system
+-type f → only files
+-size +1G → larger than 1GB
+You immediately see which file consuming space.
+
+Find Specific File Type
+Find all .conf files:
+find /etc -name "*.conf"
+
+find /var/log/myapp  -name  *.log
+/var/log/myapp/app.log
+
+===========================================================
+3️⃣ awk
+✅ Purpose
+Text processing & column extraction.
+🔥 Production Use Case
+Log format:
+IP - - [date] "GET /index.html" 200
+Need only IPs:
+awk '{print $1}' access.log
+
+example
+
+ awk '{print $1}' /var/log/myapp/app.log
+[200~2026-02-21
+2026-02-21
+2026-02-21
+2026-02-21
+2026-02-21
+2026-02-21
+2026-02-21
+2026-02-21
+2026-02-21
+2026-02-21
+
+awk -F'-' '{print $1}' /var/log/myapp/app.log
+-F'-' → tells awk to split using -
+print $1 → prints first field before -
+2026
+2026
+2026
+...
+If You Want Only One Unique Year
+awk -F'-' '{print $1}' /var/log/myapp/app.log | uniq
+Or safer:
+awk -F'-' '{print $1}' /var/log/myapp/app.log | sort -u
+
+==================================
+4️⃣ sed
+✅ Purpose
+Find & replace in files.
+🔥 Production Use Case
+Change config port 8080 → 9090
+sed -i 's/8080/9090/g' config.yaml
+--------->sed<-----------
+Change Port Number in Production Config
+File: /etc/nginx/nginx.conf
+Before:
+listen 8080;
+You need to change to 9090.
+Command:
+sed -i 's/8080/9090/g' /etc/nginx/nginx.conf
+Explanation:
+
+s → substitute
+8080 → old value
+9090 → new value
+g → replace all occurrences
+Used during environment migration.
+
+sed -i s/sairam/prabhas/g file1
+[root@ip-172-31-1-122 ~]# cat file1
+prabhas
+if we use "g" means it will replace every where in the file
+=======================================================
+1️⃣2️⃣ journalctl
+✅ Purpose
+View systemd logs.
+
+
 

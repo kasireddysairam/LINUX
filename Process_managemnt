@@ -1,1 +1,64 @@
 
+1.CPU and OS
+CPU = Worker who does the actual work
+OS (Operating System) = Manager who tells the worker what to do
+
+The CPU performs the task.
+The OS manages and controls the work.
+==========================================
+2.Process
+A process is a running instance of any program.
+Examples: python, shell, etc.
+Commands:
+ps aux | nl
+→ Gives the list of processes with line numbers.
+ps aux | wc -l
+→ Gives only the total number of processes.
+
+Difference Between ps aux and ps -ef
+ps aux
+→ Shows CPU and memory utilization of processes.
+ps -ef
+→ Does NOT show CPU and memory usage.
+→ Shows full-format listing (UID, PID, PPID, start time, etc.).
+
+Process Priority
+We can set priority for a process using:
+renice -n 10 -p <PID>
+-n 10 → Sets the nice value (priority)
+-p → Process ID
+=====================================================
+3.Services
+Services are background-running processes.
+Services start automatically during server boot.
+
+To list services:
+systemctl list-units --type=service
+Service vs Process
+
+Service → Managed by systemd
+Process → Managed by the Kernel
+
+
+
+service are background running  process
+**services start at booting of our  server
+
+To list services
+systemctl list-units --type=service
+
+Service → managed by systemd
+Process → managed by kernel
+
+All external commands create new processes. location(/bin/ls)
+Executed by
+Kernel loads program
+
+Built-in commands run inside the shell process.location(Inside bash)
+Executed by
+Shell runs directly
+
+
+
+
+

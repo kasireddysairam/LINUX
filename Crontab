@@ -6,4 +6,60 @@
 │ └──────── Hour (0-23)
 └────────── Minute (0-59)
 
-List existing jobs:----> crontab -l
+ 
+===> List existing jobs:----> crontab -l
+
+
+0 → Keyboard (input)
+1 → Normal Output (STDOUT)
+2 → Error Output (STDERR)
+o remember:
+🟢 1 = Good news
+🔴 2 = Bad news
+
+
+🟢 Summary Table
+Requirement   	 Command
+Only STDOUT	     > file
+Only STDERR	     2> file
+Both same file	 > file 2>&1
+Separate files	 > success.log 2> error.log
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

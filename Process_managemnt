@@ -27,6 +27,14 @@ We can set priority for a process using:
 renice -n 10 -p <PID>
 -n 10 → Sets the nice value (priority)
 -p → Process ID
+
+Identify which process is using CPU
+ps aux --sort=-%cpu | head
+---> If any process having more cpu usage  2 things we can do
+1. kill the process --->kill -9 process_id
+2.we can also reduce priority  for particular cpu by  using
+renice -n 10 -p <PID>
+
 =====================================================
 3.Services
 Services are background-running processes.

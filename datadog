@@ -36,9 +36,50 @@ Used for counts,total volume
 ==>Count (errors, failures, requests)
 mainly used for error count for any service like lambda errors,glue job failue..etc
 =====================================================
+Time Aggregation  vs Space Aggregation
+===> Time Aggregation
+👉 Combining values over time
+Same resource, multiple timestamps.
+Example question:
+“What was CPU average in last 5 minutes?”
+You are aggregating over time.
+for ec2 instance  last 5 mins cpu values 
+Because we combined values over time.
+Use Time Aggregation When:
+Alerting
+Checking spikes
+Rolling average
+
+max(last_5m)
+avg(last_10m)
+sum(last_1h)
 
 
 
+
+==>Space Aggregation
+👉 Combining values across resources
+Different hosts, same timestamp.
+Example question:
+“What is average CPU across all instances?”
+You are aggregating across space (hosts).
+
+we calculate 5 differnet hosts
+This is Space Aggregation
+Because we combined values across hosts.
+
+->Use Space Aggregation When:
+Cluster health overview
+Capacity planning
+Overall system performance
+
+==>avg:cpu without grouping
+=========================================
+
+       SIMPLE DIFFERENCE
+Type	Combines             What?
+Time Aggregation	         Same host, different timestamps
+Space Aggregation	         Different hosts, same timestamp
 
 
 

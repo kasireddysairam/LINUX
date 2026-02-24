@@ -1,0 +1,58 @@
+Aggregation means:
+How Datadog combines multiple data points into one value.
+That combining process = Aggregation
+There are 2 levels of aggregation:
+1️⃣ Time Aggregation (Over Time)
+Example:
+CPU values in 1 minute:
+10%
+20%
+30%
+40%
+avg()===> 10+20+30+40/4==25%
+max()===>  40%
+min()===> 10%
+count() ==>Real Use Case:
+How many times error happened.-->count:aws.lambda.errors{env:prod}
+
+
+2️⃣ Space Aggregation (Across Hosts / Resources)
+Example:
+You have 3 EC2 instances:
+Instance A → 40%
+Instance B → 60%
+Instance C → 20%
+
+=============================
+avg() vs sum()
+avg()
+Calculates average value	
+Used for utilization
+avg() is used for percentage  basis like cpu ,meory,disk
+
+sum()
+Adds all values together
+Used for counts,total volume
+==>Count (errors, failures, requests)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

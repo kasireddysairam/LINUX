@@ -34,6 +34,9 @@ sum()
 Adds all values together
 Used for counts,total volume
 ==>Count (errors, failures, requests)
+mainly used for error count for any service like lambda errors,glue job failue..etc
+=====================================================
+
 
 
 

@@ -45,7 +45,17 @@ How do you want to combine data?
 There are two directions:
 1️⃣ Across hosts (space aggregation)
 2️⃣ Across time (time aggregation)
+================================================
 
+First Understand: What is Aggregation?
+
+Aggregation = “How Datadog combines data”
+
+There are 2 types in alerts:
+
+Type	                     Meaning	                                       Think Like
+Time Aggregation	         How values are combined over time	Over         minutes
+Space Aggregation	         How values are combined across machines	       Across instances
 
 
 

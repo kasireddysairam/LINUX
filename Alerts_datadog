@@ -53,9 +53,9 @@ Aggregation = “How Datadog combines data”
 
 There are 2 types in alerts:
 
-Type	                     Meaning	                                       Think Like
-Time Aggregation	         How values are combined over time	Over         minutes
-Space Aggregation	         How values are combined across machines	       Across instances
+Type	                     Meaning	                                        Think Like
+Time Aggregation	         How values are combined over time	Over            minutes
+Space Aggregation	         How values are combined across machines	          Across instances
 
 
 

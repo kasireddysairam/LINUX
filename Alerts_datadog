@@ -1,0 +1,56 @@
+Alerts
+---------
+alerts=> we need to take action now
+
+==>Understanding Aggregation in Alerts
+Alerts use TWO aggregations:
+1️⃣ Time aggregation
+2️⃣ Space aggregation
+
+
+1.TIME Aggregation
+Example:
+avg(last_5m):metric
+Means:
+Take last 5 minutes of data and average it.
+
+2.SPACE Aggregation
+Example:
+avg:system.cpu.user{env:prod}
+Means:
+Average across all hosts.
+example:
+If:
+Host1 = 95%
+Host2 = 20%
+Host3 = 25%
+
+avg = 46%
+No alert.
+
+But if you use:
+max:system.cpu.user{env:prod}
+max = 95%
+======================================================
+
+Important Alert Decision
+Ask:
+Do I care about cluster health or single host?
+Cluster health → avg
+Single host safety → max by host
+
+What is Aggregation?
+When you create an alert in Datadog, system asks:
+How do you want to combine data?
+There are two directions:
+1️⃣ Across hosts (space aggregation)
+2️⃣ Across time (time aggregation)
+
+
+
+
+
+
+
+
+

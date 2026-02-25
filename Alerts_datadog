@@ -58,6 +58,30 @@ Time Aggregation	         How values are combined over time	Over            minu
 Space Aggregation	         How values are combined across machines	          Across instances
 
 
+Example:
+Time aggregation =
+“How metric values are combined over a time window?”
+Example:
+Last 5 minutes
+Last 10 minutes
+Last 15 minutes
+
+=======================
+2️⃣ What is Space Aggregation? (Across Hosts)
+👉 Simple Meaning:
+How to combine multiple instances / hosts
+Example: 3 EC2 instances CPU at same time:
+
+Instance	CPU
+i-1	40%
+i-2	60%
+i-3	90%
+
+Now Datadog must combine these.
+That combining = Space Aggregation
+
+
+if we use max() if we have 5 isnatnce any one ec2 instance  reach 80% we get alerts
 
 
 

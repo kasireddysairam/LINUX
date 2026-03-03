@@ -1,0 +1,253 @@
+import streamlit as st
+from snowflake.snowpark.context import get_active_session
+import pandas as pd
+ 
+st.set_page_config(layout="wide")
+ 
+# -----------------------------
+# SESSION STATE INIT
+# -----------------------------
+if 'search_performed' not in st.session_state:
+    st.session_state.search_performed = False
+if 'last_results' not in st.session_state:
+    st.session_state.last_results = None
+if 'last_input' not in st.session_state:
+    st.session_state.last_input = ""
+ 
+# -----------------------------
+# ENHANCED DARK ENTERPRISE CSS
+# -----------------------------
+st.markdown("""
+<style>
+html, body, [data-testid="stAppViewContainer"] {
+    background-color: #0f172a;
+    color: white;
+}
+section[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #111827, #1f2937);
+    color: white !important;
+}
+section[data-testid="stSidebar"] * {
+    color: white !important;
+}
+.sidebar-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 25px;
+    color: white;
+    text-transform: uppercase;
+}
+.stTextInput input {
+    border-radius: 12px;
+    padding: 12px 16px !important;
+    border: 2px solid #334155 !important;
+    background-color: #1e293b !important;
+    color: white !important;
+}
+.stButton>button {
+    background: linear-gradient(135deg, #7SURNAMEaed, #6d28d9);
+    color: white;
+    border-radius: 12px;
+    padding: 12px 32px;
+    border: none;
+    font-weight: 600;
+}
+.result-card {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    padding: 25px;
+    border-radius: 15px;
+    margin-top: 25px;
+    border: 2px solid #7SURNAMEaed;
+}
+.detail-section {
+    background: rgba(124, 58, 237, 0.1);
+    border-left: 5px solid #7SURNAMEaed;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 15px 0;
+}
+.badge-active {
+    background: #10b981;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+.badge-inactive {
+    background: #ef4444;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+.badge-admin {
+    background: #f59e0b;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+.badge-user {
+    background: #3b82f6;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+h1 {
+    text-align: center;
+    font-size: 36px;
+}
+</style>
+""", unsafe_allow_html=True)
+ 
+session = get_active_session()
+ 
+# -----------------------------
+# SIDEBAR
+# -----------------------------
+with st.sidebar:
+    st.markdown('<div class="sidebar-title">DX-IN User Inventory</div>', unsafe_allow_html=True)
+    search_option = st.radio("Search By:", ["Mail", "Employee ID"])
+ 
+# -----------------------------
+# MAIN TITLE
+# -----------------------------
+st.title("User Inventory Search")
+ 
+# -----------------------------
+# SEARCH SECTION
+# -----------------------------
+left, center, right = st.columns([1, 7, 1])
+ 
+with center:
+ 
+    # ✅ NEW HEADER ABOVE SEARCH
+    st.markdown("""
+<div style="
+            text-align:center;
+            font-size:18px;
+            font-weight:600;
+            margin-bottom:15px;
+            color:#94a3b8;">
+            🔎 Enter Mail or Employee ID to Search User
+</div>
+    """, unsafe_allow_html=True)
+ 
+    col1, col2 = st.columns([5, 2])
+ 
+    with col1:
+        if search_option == "Mail":
+            user_input = st.text_input(
+                "Enter Employee Email",
+                placeholder="firstname.lastname@company.com"
+            )
+        else:
+            user_input = st.text_input(
+                "Enter Employee ID",
+                placeholder="7000002123"
+            )
+ 
+    # 🔥 Reset search when input changes
+    if user_input != st.session_state.last_input:
+        st.session_state.search_performed = False
+ 
+    with col2:
+        st.write("")
+        st.write("")
+        search_btn = st.button(
+            " Search",
+            use_container_width=True,
+            disabled=not bool(user_input)
+        )
+ 
+# -----------------------------
+# QUERY EXECUTION
+# -----------------------------
+if search_btn:
+    with st.spinner(" Searching..."):
+        try:
+            if search_option == "Mail":
+                filter_condition = "LOWER(a.MAIL) = LOWER(?)"
+            else:
+                filter_condition = "TRIM(a.EMPLOYEEID) = TRIM(?)"
+ 
+            query = f"""
+            WITH common_user AS (
+                SELECT 
+                    a.MAIL, a.GIVENNAME, a.SURNAME, a.EMPLOYEEID, a.GITHUBID,
+                    g.LOGIN, g.USER_ID, g.USER_TYPE
+                FROM user_inventory_test.public.EMPLOYEE_DX a
+                LEFT JOIN user_inventory_test.public.GITHUB_USERS g
+                    ON TRIM(LOWER(a.GITHUBID)) = TRIM(LOWER(g.LOGIN))
+                WHERE {filter_condition}
+            )
+            SELECT
+                cu.MAIL,
+                cu.GIVENNAME,
+                cu.SURNAME,
+                cu.EMPLOYEEID,
+                cu.GITHUBID,
+                cu.LOGIN,
+                cu.USER_ID,
+                cu.USER_TYPE,
+                ju.IS_ACTIVE,
+                ju.IS_ADMIN
+            FROM common_user cu
+            LEFT JOIN user_inventory_test.public.JIRA_USERS ju
+                ON LOWER(CONCAT(cu.GIVENNAME, ' ', cu.SURNAME)) = LOWER(ju.DISPLAY_NAME)
+            """
+ 
+            df = session.sql(query, params=[user_input]).to_pandas()
+ 
+            st.session_state.search_performed = True
+            st.session_state.last_results = df
+            st.session_state.last_input = user_input
+ 
+        except Exception as e:
+            st.error(f"Database Error: {str(e)}")
+            st.session_state.search_performed = False
+ 
+# -----------------------------
+# DISPLAY RESULTS
+# -----------------------------
+if st.session_state.search_performed and st.session_state.last_results is not None:
+ 
+    df = st.session_state.last_results
+ 
+    with center:
+        if df.empty:
+            st.warning("No user found.")
+        else:
+            for _, row in df.iterrows():
+ 
+                st.markdown('<div class="result-card">', unsafe_allow_html=True)
+ 
+                name = f"{row['GIVENNAME']} {row['SURNAME']}"
+                st.markdown(f"### {name}")
+                st.markdown(f"**Employee ID:** {row['EMPLOYEEID']}")
+ 
+                # Personal Info
+                st.markdown('<div class="detail-section">', unsafe_allow_html=True)
+                st.markdown(f"**Email:** {row['MAIL']}")
+                st.markdown('</div>', unsafe_allow_html=True)
+ 
+                # GitHub Section
+                st.markdown("#### GitHub Access")
+                st.markdown('<div class="detail-section">', unsafe_allow_html=True)
+                st.markdown(f"Login: {row['LOGIN']}")
+                st.markdown(f"User ID: {row['USER_ID']}")
+                st.markdown(f"User Type: {row['USER_TYPE']}")
+                st.markdown('</div>', unsafe_allow_html=True)
+ 
+                # JIRA Section
+                st.markdown("#### JIRA Access")
+                st.markdown('<div class="detail-section">', unsafe_allow_html=True)
+ 
+                is_active = row['IS_ACTIVE']
+                is_admin = row['IS_ADMIN']
+ 
+                active_badge = '<span class="badge-active">ACTIVE</span>' if is_active else '<span class="badge-inactive">INACTIVE</span>'
+                admin_badge = '<span class="badge-admin">ADMIN</span>' if is_admin else '<span class="badge-user">USER</span>'
+ 
+                st.markdown(f"Status: {active_badge}", unsafe_allow_html=True)
+                st.markdown(f"Role: {admin_badge}", unsafe_allow_html=True)
+ 
+                st.markdown('</div>', unsafe_allow_html=True)
+                st.markdown('</div>', unsafe_allow_html=True)
